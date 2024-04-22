@@ -21,42 +21,28 @@ function getReviews() {
     return JSON.parse(reviews);
 }
 
-function testList() {
-    const reviewsLs = getReviews();
-    for (let i = 0; i < reviewsLs.length; i++) {
-        if (reviewsLs[i].reviews.length === 0) {
-            reviewsLs.splice(i, 1);
-            console.log(reviewsLs);
-            return true;
-        }
-        return false;
-    }
-}
-
-
-
 function deleteReview(productName, rev) {
-
-    for (const product of reviewsLs) {
-        if (product.name === productName) {
-            const reviews = product.reviews;
-            for (let i = 0; i < reviews.length; i++) {
-                if (reviews[i] === rev) {
-                    reviews.splice(i, 1);
-                    console.log(reviews);
-                    if (reviews.length === 0) {
-                        console.log(reviewsLs);
-                        testList();
+    const lsReview = getReviews();
+    
+    for (let i = 0; i < lsReview.length; i++) {
+        if (lsReview[i].name === productName) {
+            if (lsReview[i].reviews.length === 1 ) {
+                lsReview.splice(i, 1);
+                console.log(lsReview);
+            } else {
+                const listReviews = lsReview[i].reviews;
+                for (let i = 0; i < listReviews.length; i++) {
+                    if (listReviews[i]===rev) {
+                        listReviews.splice(i, 1);
                     }
                 }
-                localStorage.setItem(lsReviewKey, JSON.stringify(reviewsLs));
-                return;
-                
             }
-        }
-    }
-    return false;
+            localStorage.setItem(lsReviewKey, JSON.stringify(lsReview));
 
+            
+        }
+        
+    }
 }
 
 
@@ -77,9 +63,10 @@ for (const product of reviewsLs) {
     productDiv.append(hideRevBtn);
     const ulEl = document.createElement('ul');
     productDiv.append(ulEl);
-    const listReview = product.reviews;
+    
 
     showRevBtn.addEventListener('click', () => {
+        const listReview = product.reviews;
         for (const rev of listReview) {
             
             const liEl = document.createElement('li');
@@ -89,11 +76,15 @@ for (const product of reviewsLs) {
             delRevBtn.textContent = 'Удалить отзыв';
             ulEl.append(delRevBtn);
             delRevBtn.addEventListener('click', () => {
-                liEl.remove();
-                delRevBtn.remove();
-               /*  if (testList()) {
+                if (ulEl.childNodes.length === 2) {
                     productDiv.innerHTML = '';
-                } */
+                    deleteReview(product.name, rev);
+                } else {
+                    liEl.remove();
+                    delRevBtn.remove();
+                    deleteReview(product.name, rev);
+                }
+                
             })
             
 
