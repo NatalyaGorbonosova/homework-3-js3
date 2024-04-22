@@ -11,7 +11,7 @@ localstorage, так и со страницы. */
 const contentDiv = document.querySelector('.content');
 
 const lsReviewKey = 'reviews';
-const reviewsLs = getReviews();
+
 
 function getReviews() {
     const reviews = localStorage.getItem(lsReviewKey);
@@ -26,16 +26,14 @@ function testList() {
     for (let i = 0; i < reviewsLs.length; i++) {
         if (reviewsLs[i].reviews.length === 0) {
             reviewsLs.splice(i, 1);
+            console.log(reviewsLs);
             return true;
         }
         return false;
     }
 }
 
-function changeLocalStorage() {
-    testList();
-    localStorage.setItem(lsReviewKey, JSON.stringify(reviewsLs));
-}
+
 
 function deleteReview(productName, rev) {
 
@@ -45,8 +43,13 @@ function deleteReview(productName, rev) {
             for (let i = 0; i < reviews.length; i++) {
                 if (reviews[i] === rev) {
                     reviews.splice(i, 1);
+                    console.log(reviews);
+                    if (reviews.length === 0) {
+                        console.log(reviewsLs);
+                        testList();
+                    }
                 }
-                changeLocalStorage();
+                localStorage.setItem(lsReviewKey, JSON.stringify(reviewsLs));
                 return;
                 
             }
@@ -57,9 +60,9 @@ function deleteReview(productName, rev) {
 }
 
 
-
+const reviewsLs = getReviews();
 for (const product of reviewsLs) {
-    testList();
+    
     const productDiv = document.createElement('div');
     contentDiv.append(productDiv);
     productDiv.classList.add('product');
@@ -78,6 +81,7 @@ for (const product of reviewsLs) {
 
     showRevBtn.addEventListener('click', () => {
         for (const rev of listReview) {
+            
             const liEl = document.createElement('li');
             liEl.textContent = rev;
             ulEl.append(liEl);
@@ -85,13 +89,11 @@ for (const product of reviewsLs) {
             delRevBtn.textContent = 'Удалить отзыв';
             ulEl.append(delRevBtn);
             delRevBtn.addEventListener('click', () => {
-                deleteReview(product.name, rev);
-
                 liEl.remove();
                 delRevBtn.remove();
-                if (testList()) {
-                    productDiv.remove();
-                }
+               /*  if (testList()) {
+                    productDiv.innerHTML = '';
+                } */
             })
             
 

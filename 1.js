@@ -17,7 +17,7 @@ function getReviews() {
 
 function addReview(productName, review) {
     const reviewsLs = getReviews();
-    console.log(reviewsLs);
+    
     for (const rev of reviewsLs) {
         if (rev.name === productName) {
             rev.reviews.push(review);
@@ -38,5 +38,9 @@ const addBtn = document.querySelector('.add-review');
 addBtn.addEventListener('click', () => {
     const productName = prodauctNameEl.value;
     const review = reviewEl.value;
+    if (review === '' || productName === '') {
+        alert('Заполните все поля');
+        return;
+    }
     addReview(productName, review);
 })
