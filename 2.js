@@ -11,7 +11,13 @@ localstorage, так и со страницы. */
 const contentDiv = document.querySelector('.content');
 
 const lsReviewKey = 'reviews';
+const startLS = [
+    {name:"Apple iPhone 13", reviews: ["Отличный телефон! Батарея держится долго.", "Камера супер, фото выглядят просто потрясающе."]},
+    {name: "Samsung Galaxy Z Fold 3", reviews: ["Интересный дизайн, но дорогой."]
 
+}]
+
+localStorage.setItem(lsReviewKey, JSON.stringify(startLS));
 
 function getReviews() {
     const reviews = localStorage.getItem(lsReviewKey);
